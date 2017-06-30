@@ -77,6 +77,15 @@ class DownloadDispatcher extends Thread {
             DownloadRequest request = null;
             try {
                 request = mQueue.take();
+
+                if (request.isCancelled()) {
+                    Log.v("Request was cancelled before starting process " + request.getDownloadId());
+                    request.setDownloadState(DownloadManager.STATUS_FAILED);
+                    request.finish();
+                    mDelivery.postDownloadFailed(request, DownloadManager.ERROR_DOWNLOAD_CANCELLED, "Download cancelled");
+                    continue;
+                }
+
                 mRedirectionCount = 0;
 		 		shouldAllowRedirects = true;
                 Log.v("Download initiated for " + request.getDownloadId());
