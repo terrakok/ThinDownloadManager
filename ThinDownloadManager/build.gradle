@@ -1,84 +1,17 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'java'
 
 version = "1.3.0"
 group = "com.mani"
+ 
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
 
-def siteUrl = 'https://github.com/smanikandan14/ThinDownloadManager.git'
-def gitUrl = 'https://github.com/smanikandan14/ThinDownloadManager.git'
-
-android {
-    compileSdkVersion 25
-    buildToolsVersion "21.1.2"
-
-    defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1"
-    }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-    }
-
-    lintOptions {
-        abortOnError false
-    }
-}
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "thindownloadmanager"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
+task makeJar(type: Jar, dependsOn: classes) {
+    from('build/classes/main')
 }
 
+assemble.dependsOn makeJar
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name 'To download files and to avoid using DOWNLOAD_WITHOUT_NOTIFICATION permission if you are using Android\'s DownloadManager in your apps'
-                url siteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'smanikandan14'
-                        name 'Mani Selvaraju'
-                        email 'smanikandan14@gmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-
-                }
-            }
-        }
-    }
+dependencies {
+    compileOnly 'com.google.android:android:4.0.1.2'
 }
-
-apply from: '../maven_push.gradle'

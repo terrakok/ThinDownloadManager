@@ -1,0 +1,12 @@
+# built files
+build/
+build.log
+build-log.xml
+
+.DS_Store
+
+# Temporary file
+*~
+*.swp
+
+*.orig

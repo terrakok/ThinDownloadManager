@@ -1,19 +1,36 @@
 package com.thin.downloadmanager;
 
 /**
- * A Listener for the download progress.
+ * A Listener for the Download Status. Implement this interface to listen to Download Events.
  *
- * @deprecated use {@link DownloadStatusListenerV1} instead
+ * @author Hari Gangadharan
  */
-@Deprecated
 public interface DownloadStatusListener {
 
-    //Callback when download is successfully completed
-	void onDownloadComplete (int id);
+    /**
+     * This method is invoked when download is complete.
+     *
+     * @param downloadRequest   the download request provided by the client
+     */
+    void onDownloadComplete(DownloadRequest downloadRequest);
 
-    //Callback if download is failed. Corresponding error code and error messages are provided
-    void onDownloadFailed (int id, int errorCode, String errorMessage);
 
-    //Callback provides download progress
-	void onProgress (int id, long totalBytes, long downloadedBytes, int progress);
+    /**
+     * This method is invoked when download has failed.
+     *
+     * @param downloadRequest   the download request provided by the client
+     * @param errorCode         the download error code
+     * @param errorMessage      the error message
+     */
+    void onDownloadFailed(DownloadRequest downloadRequest, int errorCode, String errorMessage);
+
+    /**
+     * This method is invoked on a progress update.
+     *
+     * @param downloadRequest   the download request provided by the client
+     * @param totalBytes        the total bytes
+     * @param downloadedBytes   bytes downloaded till now
+     * @param progress          the progress of download
+     */
+	void onProgress(DownloadRequest downloadRequest, long totalBytes, long downloadedBytes, int progress);
 }

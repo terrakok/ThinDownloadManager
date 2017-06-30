@@ -52,9 +52,6 @@ public class DownloadRequestQueue {
 		public void postDownloadComplete(final DownloadRequest request) {
 			mCallBackExecutor.execute(new Runnable() {
 				public void run() {
-					if (request.getDownloadListener() != null) {
-						request.getDownloadListener().onDownloadComplete(request.getDownloadId());
-					}
 					if (request.getStatusListener() != null) {
 						request.getStatusListener().onDownloadComplete(request);
 					}
@@ -65,9 +62,6 @@ public class DownloadRequestQueue {
 		public void postDownloadFailed(final DownloadRequest request, final int errorCode, final String errorMsg) {
 			mCallBackExecutor.execute(new Runnable() {
 				public void run() {
-					if (request.getDownloadListener() != null) {
-						request.getDownloadListener().onDownloadFailed(request.getDownloadId(), errorCode, errorMsg);
-					}
 					if (request.getStatusListener() != null) {
 						request.getStatusListener().onDownloadFailed(request, errorCode, errorMsg);
 					}
@@ -78,9 +72,6 @@ public class DownloadRequestQueue {
 		public void postProgressUpdate(final DownloadRequest request, final long totalBytes, final long downloadedBytes, final int progress) {
 			mCallBackExecutor.execute(new Runnable() {
 				public void run() {
-					if (request.getDownloadListener() != null) {
-						request.getDownloadListener().onProgress(request.getDownloadId(), totalBytes, downloadedBytes, progress);
-					}
 					if (request.getStatusListener() != null) {
 						request.getStatusListener().onProgress(request, totalBytes, downloadedBytes, progress);
 					}

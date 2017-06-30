@@ -52,9 +52,7 @@ public class DownloadRequest implements Comparable<DownloadRequest> {
 
     private DownloadRequestQueue mRequestQueue;
 
-    private DownloadStatusListener mDownloadListener;
-
-    private DownloadStatusListenerV1 mDownloadStatusListenerV1;
+    private DownloadStatusListener mDownloadStatusListener;
 
     private Object mDownloadContext;
 
@@ -145,38 +143,23 @@ public class DownloadRequest implements Comparable<DownloadRequest> {
         this.mDownloadState = mDownloadState;
     }
 
-    DownloadStatusListener getDownloadListener() {
-        return mDownloadListener;
-    }
-
-    /**
-     * Sets the download listener for this download request. Use setStatusListener instead.
-     *
-     * @deprecated use {@link #setStatusListener} instead.
-     */
-    @Deprecated
-    public DownloadRequest setDownloadListener(DownloadStatusListener downloadListener) {
-        this.mDownloadListener = downloadListener;
-        return this;
-    }
-
     /**
      * Gets the status listener. For internal use.
      *
      * @return  the status listener
      */
-    DownloadStatusListenerV1 getStatusListener() {
-        return mDownloadStatusListenerV1;
+    DownloadStatusListener getStatusListener() {
+        return mDownloadStatusListener;
     }
 
     /**
      * Sets the status listener for this download request. Download manager sends progress,
      * failure and completion updates to this listener for this download request.
      *
-     * @param downloadStatusListenerV1 the status listener for this download
+     * @param downloadStatusListener the status listener for this download
      */
-    public DownloadRequest setStatusListener(DownloadStatusListenerV1 downloadStatusListenerV1) {
-        mDownloadStatusListenerV1 = downloadStatusListenerV1;
+    public DownloadRequest setStatusListener(DownloadStatusListener downloadStatusListener) {
+        mDownloadStatusListener = downloadStatusListener;
         return this;
     }
 
