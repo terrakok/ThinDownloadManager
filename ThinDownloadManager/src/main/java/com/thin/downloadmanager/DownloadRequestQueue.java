@@ -3,6 +3,8 @@ package com.thin.downloadmanager;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.thin.downloadmanager.util.Log;
+
 import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.Set;
@@ -182,16 +184,30 @@ public class DownloadRequestQueue {
 	 * @return int
 	 */
 	int cancel(int downloadId) {
-		synchronized (mCurrentRequests) {
-			for (DownloadRequest request : mCurrentRequests) {
-				if (request.getDownloadId() == downloadId) {
-					request.cancel();
-					return 1;
-				}
-			}
-		}
+        DownloadRequest foundedRequest = null;
 
-		return 0;
+        synchronized (mCurrentRequests) {
+            for (DownloadRequest request : mCurrentRequests) {
+                if (request.getDownloadId() == downloadId) {
+                    foundedRequest = request;
+                    foundedRequest.cancel();
+                    break;
+                }
+            }
+        }
+
+        if (foundedRequest != null) {
+            if (mDownloadQueue.remove(foundedRequest)) {
+                Log.v("Request was cancelled " + foundedRequest.getDownloadId());
+                foundedRequest.setDownloadState(DownloadManager.STATUS_FAILED);
+                foundedRequest.finish();
+                mDelivery.postDownloadFailed(foundedRequest, DownloadManager.ERROR_DOWNLOAD_CANCELLED, "Download cancelled");
+            }
+
+            return 1;
+        }
+
+        return 0;
 	}
 
 	void finish(DownloadRequest request) {
